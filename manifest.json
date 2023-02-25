@@ -1,0 +1,16 @@
+{
+  "manifest_version": 2,
+  "name": "Mobile View",
+  "description": "Displays the mobile version of a webpage",
+  "version": "1.0",
+  "permissions": [
+    "tabs"
+  ],
+  "background": {
+    "scripts": ["background.js"]
+  },
+  "browser_action": {
+    "default_icon": "icon.png",
+    "default_popup": "popup.html"
+  }
+}
