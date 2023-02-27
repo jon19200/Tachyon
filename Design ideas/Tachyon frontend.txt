@@ -1,0 +1,30 @@
+Set up React App
+
+
+ When react first mounts, make get request to '/display' to acquire all previously stored ids, URL's, their titles, and isMobile check as an array of objects
+
+
+ - Top of app has a form where you can add a url and a mobile check to add another page
+	- Makes a post request to '/addURL' or /m/addURL sending in a new URL and isMobile check. This stores a new object in database with title, url, and isMobile check
+	- Add to end of array of objects
+	
+
+
+ - Create main grid container where we will store all of our added webpages.
+ - loop through objects invoking the componentCreator on each one. Args are (element, index)
+ 	- will add a JSX element to an array that will display a title, display a screenshot image, display lighthouse data, and display a delete button
+
+
+	 - Display the title and and makes a get request to `/metrics/${URL}`. If is mobile, `/m/metrics/${URL}`
+		- This request will save an image to image folder and return the image file's name. (backend)
+		- The moment the promise resolves, Replace image placeholder src = {`https://localhost:3000/images/${title}.jpg`}
+		- Now the image should be the screen shot.
+		- Should retrieve lighthouse data
+		- Replace the Loading... strings with these numbers as percentages
+		- Depending on number, change color of string
+		- Hover score to see message 'Open a new tab for details'
+	 	- Click on score to duplicate tab adding `/report/${title}` to it where title is the title of the html report
+            	   Maybe use window.open('http://localhost:3000/report/${title}', '_blank')
+
+	 - Delete button on each page card will remove the element from the dom by setting it to display : hidden
+		- Also send a delete request to '/delete/${idFromDatabase}' which deletes it from database
