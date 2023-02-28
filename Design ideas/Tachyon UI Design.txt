@@ -1,9 +1,0 @@
-Header of page says Tachyon in some nice styling and letter spacing. Will have form underneath to input a url and a checkbox next to it to display as mobile page
-
-
-
-Main container (grid)
- each grid box has a title, an image, and a Performance: Loading... and Accessibility: Loading... area. "Loading..." strings will become percentages.
-  Hovering the numbers will also have a message that says "Open a new tab for details"
-  Boxes will also have a delete button
-  If page is mobile, will display mobile underneath title
