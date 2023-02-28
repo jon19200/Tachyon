@@ -14,6 +14,8 @@ const App = () => {
       url = 'http://' + input;
     }
     if (isMobile) {
+      setIsMobile(false);
+      document.getElementById('isMobile').checked = false;
       fetch('/api/m/addURL', {
         method: 'POST',
         headers: {
@@ -24,7 +26,6 @@ const App = () => {
         .then((res) => res.json())
         .then((res) => setData([...data, res]));
     } else {
-      console.log('url: ', url);
       fetch('/api/addURL', {
         method: 'POST',
         headers: {
