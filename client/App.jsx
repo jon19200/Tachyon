@@ -9,6 +9,7 @@ const App = () => {
   // post request to /addURL. Check if mobile or not. Send new URL and isMobile to server. Add response to data array
   const addURL = () => {
     let url = input;
+    document.getElementById('input').value = '';
     if (!/^https?:\/\//i.test(input)) {
       url = 'http://' + input;
     }
@@ -56,7 +57,7 @@ const App = () => {
       <section>
         <h1>Tachyon</h1>
         <form>
-          <input type="text" placeholder="Enter a URL..." onChange={(e) => setURL(e.target.value)}/>
+          <input type="text" id="input" placeholder="Enter a URL..." onChange={(e) => setURL(e.target.value)}/>
           <input type="checkbox" id="isMobile" name="isMobile" onClick={() => setIsMobile(true)}/>
           <label htmlFor="isMobile">Mobile</label>
           <button type="button" onClick={(e)=>addURL()}>Add</button>
