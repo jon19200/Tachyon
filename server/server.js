@@ -2,8 +2,7 @@ const path = require('path');
 const express = require('express');
 const app = express();
 
-// FIXME: uncomment this line when you're ready to start working on the API
-//const apiRouter = require('./routes/api');
+const apiRouter = require('./routes/api');
 
 const PORT = process.env.PORT || 3000;
 
@@ -12,11 +11,10 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.resolve(__dirname, '../dist')));
 
 // route handlers
-// FIXME: uncomment this line when you're ready to start working on the API
-//app.use('/api', apiRouter);
+app.use('/api', apiRouter);
 
 // catch-all route handler for any requests to an unknown route
-app.use((req, res) => res.status(404).send('Unknown route requested... 404'));
+//app.use((req, res) => res.status(404).send('Unknown route requested... 404'));
 
 // global error handler
 app.use((err, req, res, next) => {

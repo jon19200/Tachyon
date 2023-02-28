@@ -8,13 +8,13 @@ GET to '/metrics/:url'
  - Use puppeteer to run lighthouse on url
  - Take a screenshot of the url and store in image folder as the title of the page grabbed with puppeteer again and .jpg at the end (title.jpg)
  - Grabs the HTML report and stores it in lighthouse folder as the title of the page grabbed with puppeteer again and .html at the end (title.html)
- - return the title, the performance score, and the accessibility score
+ - return the filepath, the performance score, and the accessibility score
 
 GET to '/m/metrics/:url'
  - Use puppeteer to run lighthouse on url with isMobile tag
  - Take a screenshot of the url and store in image folder as the title of the page grabbed with puppeteer again and .jpg at the end (title.jpg)
  - Grabs the HTML report and stores it in lighthouse folder as the title of the page grabbed with puppeteer again and .html at the end (title.html)
- - return the title, the performance score, and the accessibility score
+ - return the filepath, the performance score, and the accessibility score
 
 ____________________________________________________________________________
 

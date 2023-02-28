@@ -2,61 +2,62 @@ const express = require('express');
 const tachyonController = require('../controllers/tachyonController');
 const router = express.Router();
 const fs = require('fs');
+const path = require('path');
 
 // GET to '/display'
 //  - Gives all url's, their titles, and mobile checks from database
 router.get('/display',
   tachyonController.display,
-  (req, res) => res.status(200).json(res.locals)
-);
-
-// GET to '/screenshot/:url'
-//  - Use puppeteer to take a screenshot of the url and store in image folder as the title of the page grabbed with puppeteer again and .jpg at the end (title.jpg)
-//  - return the title
-
-// GET to '/m/screenshot/:url'
-//  - Use puppeteer with isMobile tag
-//  - Take a screenshot of the url and store in image folder as the title of the page grabbed with puppeteer again and .jpg at the end (title.jpg)
-//  - return the title
-router.get('/screenshot/:url', 
-  tachyonController.screenshot,
-  (req, res) => res.status(200).json(res.locals)
-);
-
-router.get('/m/screenshot/:url', 
-tachyonController.mobileScreenshot,
-(req, res) => res.status(200).json(res.locals)
+  (req, res) => res.status(200).json(res.locals.display)
 );
 
 // GET to '/metrics/:url'
-//  - Use puppeteer to run lighthouse on url
+//  - Use puppeteer to run lighthouse on url and grab screenshot
 //  - Grabs the HTML report and stores it in lighthouse folder as the title of the page grabbed with puppeteer again and .html at the end (title.html)
 //  - return the title, the performance score, and the accessibility score
 
 // GET to '/m/metrics/:url'
-//  - Use puppeteer to run lighthouse on url with isMobile tag
+//  - Use puppeteer to run lighthouse on url with isMobile tag and grab screenshot
 //  - Grabs the HTML report and stores it in lighthouse folder as the title of the page grabbed with puppeteer again and .html at the end (title.html)
 //  - return the title, the performance score, and the accessibility score
-router.get('/metrics/:url',
+router.get('/metrics/:id',
   tachyonController.metrics,
   (req, res) => res.status(200).json(res.locals)
 );
 
-router.get('/m/metrics/:url',
+router.get('/m/metrics/:id',
   tachyonController.mobileMetrics,
   (req, res) => res.status(200).json(res.locals)
 );
 
 // GET to '/report/:html'
 //  - serves the html file to the page from reports folder
-router.get('/report/:url', (req, res) => {
-  res.status(200).json(res.locals)
+router.get('/report/:title', (req, res) => {
+  console.log(__dirname);
+  //res.status(200).sendFile(`./Metrics/Desktop/Lighthouse/${req.params.title}.html`);
+  res.status(200).sendFile(path.join(__dirname, `../../Metrics/Desktop/Lighthouse/${req.params.title}.html`));
+});
+
+router.get('/m/report/:title', (req, res) => {
+  res.status(200).sendFile(path.join(__dirname, `../../Metrics/Desktop/Lighthouse/${req.params.title}.html`));
 });
 
 // GET to '/'
-//  - Clear all files from image folder and from reports folder
-router.get('/', (req, res) => {
-  res.status(200).json(res.locals)
+//  - Clear all screenshots and lighthouse reports in desktop and mobile folders
+router.get('/clear', async (req, res) => {
+  for (const file of await fs.readdirSync('Metrics/Desktop/Screenshots')) {
+    await fs.unlinkSync(`Metrics/Desktop/Screenshots/${file}`);
+  }
+  for (const file of await fs.readdirSync('Metrics/Desktop/Lighthouse')) {
+    await fs.unlinkSync(`Metrics/Desktop/Lighthouse/${file}`);
+  }
+  for (const file of await fs.readdirSync('Metrics/Mobile/Screenshots')) {
+    await fs.unlinkSync(`Metrics/Mobile/Screenshots/${file}`);
+  }
+  for (const file of await fs.readdirSync('Metrics/Mobile/Lighthouse')) {
+    await fs.unlinkSync(`Metrics/Mobile/Lighthouse/${file}`);
+  }
+  res.status(200).send('Cleared all screenshots and reports');
 });
 
 // POST to '/addURL'
@@ -73,17 +74,19 @@ router.get('/', (req, res) => {
 
 router.post('/addURL',
   tachyonController.addURL,
-  (req, res) => res.status(200).json(res.locals)
+  (req, res) => res.status(200).json(res.locals.output)
 );
 
 router.post('/m/addURL',
-  tachyonController.mobileAddURL,
-  (req, res) => res.status(200).json(res.locals)
+  tachyonController.addMobileURL,
+  (req, res) => res.status(200).json(res.locals.output)
 );
 
 // DELETE to '/delete/:id'
 //  - deletes id and its corresponding data from database
 router.delete('/delete/:id',
-  tachyonController.delete,
-  (req, res) => res.status(200).json(res.locals)
+  tachyonController.deleteURL,
+  (req, res) => res.status(200).send('Deleted')
 );
+
+module.exports = router;

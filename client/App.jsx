@@ -1,29 +1,54 @@
 import React from 'react';
-import Container from './MainContainer';
+import Container from './Container.jsx';
 
 const App = () => {
   const [data, setData] = React.useState([]);
-  let url = '';
-  let isMobile = false;
+  const [input, setURL] = React.useState('');
+  const [isMobile, setIsMobile] = React.useState(false);
 
   // post request to /addURL. Check if mobile or not. Send new URL and isMobile to server. Add response to data array
   const addURL = () => {
-    fetch('/addURL', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({url, isMobile})
-    })
-      .then((res) => res.json())
-      .then((res) => setData([...data, res]));
+    let url = input;
+    if (!/^https?:\/\//i.test(input)) {
+      url = 'http://' + input;
+    }
+    if (isMobile) {
+      fetch('/api/m/addURL', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({url})
+      })
+        .then((res) => res.json())
+        .then((res) => setData([...data, res]));
+    } else {
+      console.log('url: ', url);
+      fetch('/api/addURL', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({url})
+      })
+        .then((res) => res.json())
+        .then((res) => setData([...data, res]));
+    }
+    return;
   };
 
-  // When react first mounts, make get request to '/display' to acquire all previously stored ids, URL's, their titles, and isMobile check as an array of objects
+  // when the page loads, make a get request to '/' which clears all image and html files
   React.useEffect(() => {
-    fetch('/display')
+    fetch('/api/clear', { method : 'GET' });
+    return;
+  }, []);
+
+  // make get request to '/display' to acquire all previously stored ids, URL's, their titles, and isMobile check as an array of objects
+  React.useEffect(() => {
+    fetch('/api/display')
       .then((res) => res.json())
       .then((data) => setData(data));
+    return;
   });
 
   return (
@@ -31,10 +56,10 @@ const App = () => {
       <section>
         <h1>Tachyon</h1>
         <form>
-          <input type="text" placeholder="Enter a URL..." onChange={(input) => url = input}/>
-          <input type="checkbox" id="isMobile" name="isMobile" onClick={() => isMobile = !isMobile}/>
+          <input type="text" placeholder="Enter a URL..." onChange={(e) => setURL(e.target.value)}/>
+          <input type="checkbox" id="isMobile" name="isMobile" onClick={() => setIsMobile(true)}/>
           <label htmlFor="isMobile">Mobile</label>
-          <button type="button" onClick={addURL(url, isMobile)}>Add</button>
+          <button type="button" onClick={(e)=>addURL()}>Add</button>
         </form>
       </section>
       <Container data={data}/>
