@@ -6,13 +6,14 @@ const App = () => {
   const [input, setURL] = React.useState('');
   const [isMobile, setIsMobile] = React.useState(false);
 
-  // post request to /addURL. Check if mobile or not. Send new URL and isMobile to server. Add response to data array
+  // Gather URL from input field and make a post request to '/addURL' with the URL as a JSON object
   const addURL = () => {
     let url = input;
     document.getElementById('input').value = '';
     if (!/^https?:\/\//i.test(input)) {
       url = 'http://' + input;
     }
+    // if the isMobile checkbox is checked, make a post request to '/m/addURL' with the URL as a JSON object
     if (isMobile) {
       setIsMobile(false);
       document.getElementById('isMobile').checked = false;
@@ -39,13 +40,13 @@ const App = () => {
     return;
   };
 
-  // when the page loads, make a get request to '/' which clears all image and html files
+  // when the page loads, make a get request to '/' which clears all stored images and html files
   React.useEffect(() => {
     fetch('/api/clear', { method : 'GET' });
     return;
   }, []);
 
-  // make get request to '/display' to acquire all previously stored ids, URL's, their titles, and isMobile check as an array of objects
+  // fetch all page data from the server and set it to the data state
   React.useEffect(() => {
     fetch('/api/display')
       .then((res) => res.json())
@@ -59,9 +60,11 @@ const App = () => {
         <h1>Tachyon</h1>
         <form>
           <input type="text" id="input" placeholder="Enter a URL..." onChange={(e) => setURL(e.target.value)}/>
-          <input type="checkbox" id="isMobile" name="isMobile" onClick={() => setIsMobile(true)}/>
-          <label htmlFor="isMobile">Mobile</label>
-          <button type="button" onClick={(e)=>addURL()}>Add</button>
+          <div>
+            <input type="checkbox" id="isMobile" name="isMobile" onClick={() => setIsMobile(true)}/>
+            <label htmlFor="isMobile">Mobile</label>
+          </div>
+          <button id='submitButton' type="button" onClick={(e)=>addURL()}>Add</button>
         </form>
       </section>
       <Container data={data}/>

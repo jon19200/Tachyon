@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 
+// Enter a database link here if this one is offline
 const MONGO_URI = 'mongodb+srv://jon19200:2010@tachyon.obvgsic.mongodb.net/?retryWrites=true&w=majority';
 
 mongoose.connect(MONGO_URI, {
@@ -19,6 +20,4 @@ const pageSchema = new mongoose.Schema({
 
 const Page = mongoose.model('page', pageSchema);
 
-module.exports = {
-  Page
-};
+module.exports = Page;

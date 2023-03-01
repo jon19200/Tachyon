@@ -17,11 +17,7 @@ const PageCreator = ({ element }) => {
     isMobile = 'Desktop';
   }
 
-
-  // - Hover performance or accessibility divs to see message 'Open a new tab for details'
-  // - Click to duplicate tab adding `/report/${title}` to it where title is the title of the html report
-  //             Maybe use window.open('http://localhost:3000/report/${title}', '_blank')
-
+  // Opens a new tab with the report for the page
   const handleClick = () => {
     if (values.hasLoaded) {
       if (element.isMobile) {
@@ -31,14 +27,21 @@ const PageCreator = ({ element }) => {
       }
     }
   };
+  
+  // Opens a new tab with the url for the page
+  const handleOpenLink = () => {
+    window.open(element.url, '_blank');
+  };
+    
 
-  // Separate screenshot feature from metrics. Load screenshots as soon as you get the title url and what not for page creation.
+  // fetches the screenshot for the page and sets the src state to the image
   React.useEffect(() => {
     if (element.isMobile) {
       fetch(`/api/m/screenshot/${element._id}`)
         .then((res) => res.json())
         .then((res) => {
           const image = `data:image/png;base64,${res.src}`;
+          document.getElementById(`img:${element._id}`).style.cursor = 'pointer';
           setValues({
             ...values,
             src: image,
@@ -52,6 +55,7 @@ const PageCreator = ({ element }) => {
         .then((res) => res.json())
         .then((res) => {
           const image = `data:image/png;base64,${res.src}`;
+          document.getElementById(`img:${element._id}`).style.cursor = 'pointer';
           setValues({
             ...values,
             src: image,
@@ -63,46 +67,61 @@ const PageCreator = ({ element }) => {
     }
   }, []);
 
+  // fetches the performance and accessibility metrics for the page and sets the performance and accessibility states to the metrics
   const handleImageClick = () => {
     if (values.class !== 'Deleted' && !values.isClicked) {
-      document.getElementById(`performance:${element._id}`).style.color = 'black';
-      document.getElementById(`accessibility:${element._id}`).style.color = 'black';
+      document.getElementById(`img:${element._id}`).style.cursor = 'default';
+      let performance = document.getElementById(`performance:${element._id}`);
+      let accessibility = document.getElementById(`accessibility:${element._id}`);
+      performance.style.color = 'white';
+      accessibility.style.color = 'white';
       setValues({
         ...values,
         performance : 'Loading...',
         accessibility : 'Loading...',
         isClicked : true
       });
+      // fetches the metrics for the page if it is mobile
       if (element.isMobile) {
         fetch(`/api/m/metrics/${element._id}`)
           .then((res) => res.json())
           .then((res) => {
+            // if the metrics are strings, then there was an error
             if (typeof res.performance === 'string' || typeof res.accessibility === 'string') {
-              document.getElementById(`performance:${element._id}`).style.color = 'red';
-              document.getElementById(`accessibility:${element._id}`).style.color = 'red';
+              performance.style.color = 'rgb(255, 51, 51)';
+              accessibility.style.color = 'rgb(255, 51, 51)';
+              performance.style.fontWeight = 'bold';
+              accessibility.style.fontWeight = 'bold';
+              performance.style.cursor = 'default';
+              accessibility.style.cursor = 'default';
               setValues({
                 ...values,
                 performance: res.performance,
                 accessibility: res.accessibility,
-                hasLoaded: true
+                hasLoaded: false
               });
             } else {
+              // changes the color of the text based on the score
               if (res.performance <= 49) {
-                document.getElementById(`performance:${element._id}`).style.color = 'red';
+                performance.style.color = 'rgb(255, 51, 51)';
               } else if (res.performance <= 89) {
-                document.getElementById(`performance:${element._id}`).style.color = 'orange';
+                performance.style.color = 'rgb(255, 170, 51)';
               } else {
-                document.getElementById(`performance:${element._id}`).style.color = 'green';
+                performance.style.color = 'rgb(0, 204, 102)';
               }
               if (res.accessibility <= 49) {
-                document.getElementById(`accessibility:${element._id}`).style.color = 'red';
+                accessibility.style.color = 'rgb(255, 51, 51)';
               } else if (res.accessibility <= 89) {
-                document.getElementById(`accessibility:${element._id}`).style.color = 'orange';
+                accessibility.style.color = 'rgb(255, 170, 51)';
               } else {
-                document.getElementById(`accessibility:${element._id}`).style.color = 'green';
+                accessibility.style.color = 'rgb(0, 204, 102)';
               }
-              const performance = `${res.performance}%`;
-              const accessibility = `${res.accessibility}%`;
+              performance.style.fontWeight = 'bold';
+              performance.style.cursor = 'pointer';
+              accessibility.style.fontWeight = 'bold';
+              accessibility.style.cursor = 'pointer';
+              performance = `${res.performance}%`;
+              accessibility = `${res.accessibility}%`;
               setValues({
                 ...values,
                 performance,
@@ -110,14 +129,16 @@ const PageCreator = ({ element }) => {
                 hasLoaded: true
               });
             }
+            document.getElementById(`img:${element._id}`).style.cursor = 'pointer';
           });
       } else {
+        // fetches the metrics for the page if it is desktop
         fetch(`/api/metrics/${element._id}`)
           .then((res) => res.json())
           .then((res) => {
             if (typeof res.performance === 'string' || typeof res.accessibility === 'string') {
-              document.getElementById(`performance:${element._id}`).style.color = 'red';
-              document.getElementById(`accessibility:${element._id}`).style.color = 'red';
+              performance.style.color = 'rgb(255, 51, 51)';
+              accessibility.style.color = 'rgb(255, 51, 51)';
               setValues({
                 ...values,
                 performance: res.performance,
@@ -126,21 +147,25 @@ const PageCreator = ({ element }) => {
               });
             } else {
               if (res.performance <= 49) {
-                document.getElementById(`performance:${element._id}`).style.color = 'red';
+                performance.style.color = 'rgb(255, 51, 51)';
               } else if (res.performance <= 89) {
-                document.getElementById(`performance:${element._id}`).style.color = 'orange';
+                performance.style.color = 'rgb(255, 170, 51)';
               } else {
-                document.getElementById(`performance:${element._id}`).style.color = 'green';
+                performance.style.color = 'rgb(0, 204, 102)';
               }
               if (res.accessibility <= 49) {
-                document.getElementById(`accessibility:${element._id}`).style.color = 'red';
+                accessibility.style.color = 'rgb(255, 51, 51)';
               } else if (res.accessibility <= 89) {
-                document.getElementById(`accessibility:${element._id}`).style.color = 'orange';
+                accessibility.style.color = 'rgb(255, 170, 51)';
               } else {
-                document.getElementById(`accessibility:${element._id}`).style.color = 'green';
+                accessibility.style.color = 'rgb(0, 204, 102)';
               }
-              const performance = `${res.performance}%`;
-              const accessibility = `${res.accessibility}%`;
+              performance.style.fontWeight = 'bold';
+              performance.style.cursor = 'pointer';
+              accessibility.style.fontWeight = 'bold';
+              accessibility.style.cursor = 'pointer';
+              performance = `${res.performance}%`;
+              accessibility = `${res.accessibility}%`;
               setValues({
                 ...values,
                 performance,
@@ -148,13 +173,14 @@ const PageCreator = ({ element }) => {
                 hasLoaded: true
               });
             }
+            document.getElementById(`img:${element._id}`).style.cursor = 'pointer';
           });
       }
     }
     return;
   };
 
-  // - Click delete button to delete the page from the database
+  // deletes the page from the database and sets the class state to 'Deleted' to hide the page
   const deletePage = () => {
     const id = element._id;
     fetch(`/api/delete/${id}`, {
@@ -168,12 +194,22 @@ const PageCreator = ({ element }) => {
 
   return (
     <div className={values.class}>
-      <h1>{element.title}</h1>
-      <div>{isMobile}</div>
-      <div><img src={values.src} alt="Failed to load" onClick={(e)=>handleImageClick()}/></div>
-      <div id={`performance:${element._id}`} onClick={(e)=>handleClick()}>Performance: {values.performance}</div>
-      <div id={`accessibility:${element._id}`} onClick={(e)=>handleClick()}>Accessibility: {values.accessibility}</div>
-      <button onClick={(e)=>deletePage()}>Delete</button>
+      <div className='Title'>
+        <b onClick={(e)=>handleOpenLink()}>{element.title}</b>
+        <div>{isMobile}</div>
+      </div>
+      <div><img className='Img' id={`img:${element._id}`} src={values.src} alt="Failed to load" onClick={(e)=>handleImageClick()}/></div>
+      <div className='Stats'>
+        <div>
+          <span className='Metric'><b>Performance: </b></span>
+          <span id={`performance:${element._id}`} onClick={(e)=>handleClick()}>{values.performance}</span>
+        </div>
+        <div>
+          <span className='Metric'><b>Accessibility: </b></span>
+          <span id={`accessibility:${element._id}`} onClick={(e)=>handleClick()}>{values.accessibility}</span>
+        </div>
+        <button className='Delete' onClick={(e)=>deletePage()}>Delete</button>
+      </div>
     </div>
   );
 };
