@@ -1,5 +1,5 @@
 # Tachyon
-Displays a performance score and an accessibility score and allows you to compare it with other pages. Click on the numbers for useful tips. Works for mobile webpages too!
+Displays a performance/accessibility score and allows you to compare it with other pages. Click on the numbers for useful tips. Works for mobile webpages too!
 ___
 How to download:
 1. Clone this repository onto your machine.
