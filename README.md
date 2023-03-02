@@ -1,11 +1,11 @@
 # Tachyon
-Displays a performance/accessibility score and allows you to compare it with other pages. Click on the numbers for useful tips. Works for mobile webpages too!
+Displays performance/accessibility scores for specified urls and allows you to compare them side by side. Click on the generated numbers for useful tips. Works for mobile webpages too!
 ___
 How to download:
 1. Clone this repository onto your machine.
 2. Run 'npm install' in the terminal to download all dependencies.
 3. Navigate to server/models/tachyonModel.js
-4. Input a mongoDB link to your database in the MONGO_URI constant at line 4.
+4. Input a mongoDB link to your database in the MONGO_URI variable at line 4 in place of the empty string.
 5. Run 'npm run build' to bundle the app into one folder.
 5. Run 'npm start' and navigate towards 'localhost:3000/' in your browser.
 ___
