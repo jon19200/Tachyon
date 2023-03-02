@@ -139,11 +139,15 @@ const PageCreator = ({ element }) => {
             if (typeof res.performance === 'string' || typeof res.accessibility === 'string') {
               performance.style.color = 'rgb(255, 51, 51)';
               accessibility.style.color = 'rgb(255, 51, 51)';
+              performance.style.fontWeight = 'bold';
+              accessibility.style.fontWeight = 'bold';
+              performance.style.cursor = 'default';
+              accessibility.style.cursor = 'default';
               setValues({
                 ...values,
                 performance: res.performance,
                 accessibility: res.accessibility,
-                hasLoaded: true
+                hasLoaded: false
               });
             } else {
               if (res.performance <= 49) {
