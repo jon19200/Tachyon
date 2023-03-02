@@ -28,6 +28,10 @@ form {
   gap : 1rem;
   padding : 1rem;
   
+  #preventEnterKey {
+    display: none;
+  }
+
   #isMobile {
     cursor: pointer;
   }

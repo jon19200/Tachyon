@@ -75,10 +75,13 @@ const PageCreator = ({ element }) => {
       let accessibility = document.getElementById(`accessibility:${element._id}`);
       performance.style.color = 'white';
       accessibility.style.color = 'white';
+      performance.style.cursor = 'default';
+      accessibility.style.cursor = 'default';
       setValues({
         ...values,
         performance : 'Loading...',
         accessibility : 'Loading...',
+        hasLoaded : false,
         isClicked : true
       });
       // fetches the metrics for the page if it is mobile

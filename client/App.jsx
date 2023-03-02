@@ -60,6 +60,7 @@ const App = () => {
         <h1>Tachyon</h1>
         <form>
           <input type="text" id="input" placeholder="Enter a URL..." onChange={(e) => setURL(e.target.value)}/>
+          <input type="text" id="preventEnterKey"/>
           <div>
             <input type="checkbox" id="isMobile" name="isMobile" onClick={() => setIsMobile(true)}/>
             <label htmlFor="isMobile">Mobile</label>
