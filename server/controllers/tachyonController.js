@@ -203,9 +203,8 @@ tachyonController.deleteURL = async (req, res, next) => {
     next();
   } catch (err) {
     next({
-      status: 400,
       log: `Error in tachyonController.deleteURL: ${err}`,
-      message: { err: 'Error in tachyonController.deleteURL' },
+      message: { err: '505: Could not find/delete from database' },
     });
   }
 };
