@@ -14,7 +14,7 @@ app.use(express.static(path.resolve(__dirname, '../dist')));
 app.use('/api', apiRouter);
 
 // catch-all route handler for any requests to an unknown route
-app.use((req, res) => res.status(404).send('Unknown route requested... 404'));
+app.use((req, res) => res.status(400).send('Unknown route requested... 404'));
 
 // global error handler
 app.use((err, req, res, next) => {

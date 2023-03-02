@@ -15,7 +15,7 @@ tachyonController.display = async (req, res, next) => {
   } catch (err) {
     next({
       log: `Error in tachyonController.display: ${err}`,
-      message: { err: '505: Could not display' },
+      message: { err: '500: Could not display' },
     });
   }
 };
@@ -169,6 +169,7 @@ tachyonController.addURL = async (req, res, next) => {
     next();
   } catch (err) {
     next({
+      status: 400,
       log: `Error in tachyonController.addURL: ${err}`,
       message: { err: 'Error adding URL' },
     });
@@ -190,6 +191,7 @@ tachyonController.addMobileURL = async (req, res, next) => {
     next();
   } catch (err) {
     next({
+      status: 400,
       log: `Error in tachyonController.addMobileURL: ${err}`,
       message: { err: 'Error adding URL' },
     });
