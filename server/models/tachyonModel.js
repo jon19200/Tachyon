@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 // Enter a database link here
-const MONGO_URI = 'mongodb+srv://jon19200:2010@tachyon.obvgsic.mongodb.net/?retryWrites=true&w=majority';
+const MONGO_URI = '';
 
 mongoose.connect(MONGO_URI, {
   useNewUrlParser: true,
