@@ -5,7 +5,7 @@ How to download:
 1. Clone this repository onto your machine.
 2. Run 'npm install' in the terminal to download all dependencies.
 3. Navigate to server/models/tachyonModel.js
-4. Input a mongoDB link to your database in the MONGO_URI variable at line 4 in place of the empty string.
+4. Input a mongoDB link to your database in tachyonModel.js at line 4 in place of the empty string.
 5. Run 'npm run build' to bundle the app into one folder.
 5. Run 'npm start' and navigate towards 'localhost:3000/' in your browser.
 ___
